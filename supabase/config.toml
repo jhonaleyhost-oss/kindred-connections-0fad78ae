@@ -1,1 +1,4 @@
-project_id = "qjkaoghqatkminsufqfn"
+project_id = "qwydaslkinwtbuulbxfi"
+
+[functions.create-pterodactyl-panel]
+verify_jwt = false
