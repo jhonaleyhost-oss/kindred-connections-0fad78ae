@@ -178,36 +178,38 @@ const Dashboard = () => {
 
       const panelEmail = `${username}@valtp.net`;
       const panelPassword = `${username}2323`;
+      const ramValue = ram === 'unli' ? 0 : parseInt(ram) * 1024;
+      const cpuValue = cpu === 'unli' ? 0 : parseInt(cpu);
+      const diskValue = ram === 'unli' ? 0 : parseInt(ram) * 1024;
 
-      // Insert panel to database
-      const { error } = await supabase.from('user_panels').insert({
-        user_id: user.id,
-        server_id: selectedServer,
-        username: username,
-        email: panelEmail,
-        password: panelPassword,
-        login_url: selectedServerData.domain,
-        ram: ram === 'unli' ? 0 : parseInt(ram) * 1024,
-        cpu: cpu === 'unli' ? 0 : parseInt(cpu),
-        disk: ram === 'unli' ? 0 : parseInt(ram) * 1024,
+      // Call edge function to create panel in Pterodactyl
+      const { data, error } = await supabase.functions.invoke('create-pterodactyl-panel', {
+        body: {
+          username: username,
+          email: panelEmail,
+          password: panelPassword,
+          serverId: selectedServer,
+          ram: ramValue,
+          cpu: cpuValue,
+          disk: diskValue,
+        },
       });
 
       if (error) throw error;
 
-      // Update panel count in profile
-      await supabase
-        .from('profiles')
-        .update({ panel_creations_count: (profile?.panel_creations_count || 0) + 1 })
-        .eq('user_id', user.id);
+      if (data?.error) {
+        throw new Error(data.error);
+      }
 
       toast({
         title: 'Berhasil!',
-        description: 'Panel berhasil dibuat. Cek di List Panel.',
+        description: data?.message || 'Panel berhasil dibuat di Pterodactyl. Cek di List Panel.',
       });
 
       setUsername('');
       fetchData();
     } catch (err: any) {
+      console.error('Error creating panel:', err);
       toast({
         variant: 'destructive',
         title: 'Gagal Membuat Panel',

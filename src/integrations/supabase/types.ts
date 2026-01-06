@@ -16,9 +16,8 @@ export type Database = {
     Tables: {
       profiles: {
         Row: {
-          avatar_url: string | null
           created_at: string
-          email: string
+          email: string | null
           full_name: string | null
           id: string
           ip_address: string | null
@@ -27,9 +26,8 @@ export type Database = {
           user_id: string
         }
         Insert: {
-          avatar_url?: string | null
           created_at?: string
-          email: string
+          email?: string | null
           full_name?: string | null
           id?: string
           ip_address?: string | null
@@ -38,9 +36,8 @@ export type Database = {
           user_id: string
         }
         Update: {
-          avatar_url?: string | null
           created_at?: string
-          email?: string
+          email?: string | null
           full_name?: string | null
           id?: string
           ip_address?: string | null
@@ -111,9 +108,9 @@ export type Database = {
           username: string
         }
         Insert: {
-          cpu: number
+          cpu?: number
           created_at?: string
-          disk: number
+          disk?: number
           email: string
           id?: string
           is_active?: boolean
@@ -121,7 +118,7 @@ export type Database = {
           password: string
           ptero_server_id?: number | null
           ptero_user_id?: number | null
-          ram: number
+          ram?: number
           server_id: string
           updated_at?: string
           user_id: string
@@ -158,21 +155,21 @@ export type Database = {
         Row: {
           created_at: string
           id: string
-          role: Database["public"]["Enums"]["app_role"]
+          role: string
           updated_at: string
           user_id: string
         }
         Insert: {
           created_at?: string
           id?: string
-          role?: Database["public"]["Enums"]["app_role"]
+          role?: string
           updated_at?: string
           user_id: string
         }
         Update: {
           created_at?: string
           id?: string
-          role?: Database["public"]["Enums"]["app_role"]
+          role?: string
           updated_at?: string
           user_id?: string
         }
@@ -183,21 +180,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      get_user_role: {
-        Args: { _user_id: string }
-        Returns: Database["public"]["Enums"]["app_role"]
-      }
-      has_role: {
-        Args: {
-          _role: Database["public"]["Enums"]["app_role"]
-          _user_id: string
-        }
-        Returns: boolean
-      }
-      is_admin: { Args: { _user_id: string }; Returns: boolean }
+      [_ in never]: never
     }
     Enums: {
-      app_role: "free" | "premium" | "reseller" | "admin"
+      [_ in never]: never
     }
     CompositeTypes: {
       [_ in never]: never
@@ -324,8 +310,6 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {
-      app_role: ["free", "premium", "reseller", "admin"],
-    },
+    Enums: {},
   },
 } as const
